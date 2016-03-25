@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Movies App</string>
+
+    <string name="title_movie_list">Movies</string>
+    <string name="title_movie_detail">...</string>
+
+    <string name="plot">Plot</string>
+    <string name="director">Director</string>
+</resources>
