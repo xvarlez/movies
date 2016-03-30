@@ -2,6 +2,7 @@ package me.varlez.movies.common.di.module;
 
 import android.content.Context;
 
+import com.squareup.picasso.OkHttpDownloader;
 import com.squareup.picasso.Picasso;
 
 import javax.inject.Singleton;
@@ -28,7 +29,12 @@ public class MoviesModule {
     @Provides
     @Singleton
     Picasso providePicasso() {
-        return Picasso.with(context);
+        Picasso.Builder builder = new Picasso.Builder(context);
+
+        Picasso picasso = builder.build();
+//        picasso.setIndicatorsEnabled(true);
+
+        return picasso;
     }
 
     @Provides

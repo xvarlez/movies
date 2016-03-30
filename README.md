@@ -17,7 +17,6 @@ Sample Android app retrieving movies from a REST API and showing details about t
 
 ### TODO
 
-* Poster caching
 * Dynamic search
 * Dynamic sorting (A-Z, year, ...)
 * Nicer UI w/ animations
