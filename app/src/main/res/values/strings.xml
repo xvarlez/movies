@@ -6,4 +6,6 @@
 
     <string name="plot">Plot</string>
     <string name="director">Director</string>
+
+    <string name="error">Couldn\'t retrieve the data. Please try again</string>
 </resources>

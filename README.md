@@ -5,10 +5,11 @@ Sample Android app retrieving movies from a REST API and showing details about t
 
 ### Libraries used
 
-* Retrofit : getting data from the REST API
-* Picasso : fetching image resources from the Internet
+* Retrofit : getting movies data from the REST API
+* Picasso : fetching the poster images from the Internet
 * Dagger2 : dependency injection
 * ButterKnife : dynamic view injection
+* Mosby : MVP decoupling, LCE features
 
 ### Testing
 
@@ -16,8 +17,7 @@ Sample Android app retrieving movies from a REST API and showing details about t
 
 ### TODO
 
-* Add LCE features
+* Poster caching
 * Dynamic search
 * Dynamic sorting (A-Z, year, ...)
-* Poster caching
 * Nicer UI w/ animations
