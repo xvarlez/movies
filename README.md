@@ -1,4 +1,5 @@
-![Movies list](http://i.imgur.com/2U82Kocl.png)
+![Movies list](http://i.imgur.com/eW21e39l.png)
+![Movies search](http://i.imgur.com/uHTovnCl.png)
 ![Movie details](http://i.imgur.com/N6ONeT0l.png)
 
 Sample Android app retrieving movies from a REST API and showing details about them.
@@ -17,6 +18,5 @@ Sample Android app retrieving movies from a REST API and showing details about t
 
 ### TODO
 
-* Dynamic search
 * Dynamic sorting (A-Z, year, ...)
 * Nicer UI w/ animations
