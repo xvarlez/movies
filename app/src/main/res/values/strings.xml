@@ -8,4 +8,5 @@
     <string name="director">Director</string>
 
     <string name="error">Couldn\'t retrieve the data. Please try again</string>
+    <string name="search">Search</string>
 </resources>

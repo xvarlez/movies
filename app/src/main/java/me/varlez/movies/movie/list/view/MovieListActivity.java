@@ -1,10 +1,17 @@
 package me.varlez.movies.movie.list.view;
 
+import android.app.SearchManager;
+import android.content.Context;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.view.MenuItemCompat;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 
 import com.hannesdorfmann.mosby.mvp.lce.MvpLceActivity;
 
@@ -49,6 +56,11 @@ public class MovieListActivity extends MvpLceActivity<SwipeRefreshLayout, List<M
     @Bind(R.id.movie_list)
     RecyclerView recyclerView;
 
+    /**
+     * The movie title that should be searched.
+     */
+    private String searchQuery;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -58,6 +70,7 @@ public class MovieListActivity extends MvpLceActivity<SwipeRefreshLayout, List<M
         ButterKnife.bind(this);
 
         contentView.setOnRefreshListener(this);
+        contentView.setColorSchemeColors(ContextCompat.getColor(this, R.color.colorPrimary));
 
         setSupportActionBar(toolbar);
         toolbar.setTitle(getTitle());
@@ -66,7 +79,38 @@ public class MovieListActivity extends MvpLceActivity<SwipeRefreshLayout, List<M
             mTwoPane = true;
         }
 
+        searchQuery = "Batman";
+
         loadData(false);
+        handleIntent(getIntent());
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+        handleIntent(intent);
+    }
+
+    /**
+     * Handles the intent received by the activity and performs a search if needed.
+     * @param intent
+     */
+    private void handleIntent(Intent intent) {
+        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+            searchQuery = intent.getStringExtra(SearchManager.QUERY);
+            loadData(false);
+        }
+    }
+
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.activity_movie_list, menu);
+
+        SearchView searchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.action_search));
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+
+        return true;
     }
 
     @Override
@@ -108,7 +152,7 @@ public class MovieListActivity extends MvpLceActivity<SwipeRefreshLayout, List<M
 
     @Override
     public void loadData(boolean pullToRefresh) {
-        presenter.movieList("Batman", pullToRefresh);
+        presenter.movieList(searchQuery, pullToRefresh);
     }
 
     @NonNull
