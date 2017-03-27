@@ -8,7 +8,7 @@ Sample Android app retrieving movies from a REST API and showing details about t
 * Retrofit : getting data from the REST API
 * Picasso : fetching image resources from the Internet
 * Dagger2 : dependency injection
-* ButterKnife : to avoid findViewById's ...
+* ButterKnife : dynamic view injection
 
 ### Testing
 
