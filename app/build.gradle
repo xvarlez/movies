@@ -1,17 +1,14 @@
 apply plugin: 'com.android.application'
 
 android {
-    defaultConfig {
-        testInstrumentationRunner "me.varlez.movies.MockTestRunner"
-    }
-
     compileSdkVersion 25
     buildToolsVersion '25.0.0'
 
     defaultConfig {
         applicationId "me.varlez.movies"
         minSdkVersion 16
-        targetSdkVersion 23
+        targetSdkVersion 25
+        testInstrumentationRunner "me.varlez.movies.MockTestRunner"
         versionCode 1
         versionName "1.0"
     }
@@ -23,11 +20,11 @@ android {
     }
 }
 
-final DAGGER_VERSION = '2.0.2'
+final DAGGER_VERSION = '2.10'
 final SUPPORT_VERSION = '25.3.1'
-final RETROFIT_VERSION = '2.0.0'
-final ESPRESSO_VERSION = '2.2.1'
-final RUNNER_VERSION = '0.4'
+final RETROFIT_VERSION = '2.2.0'
+final ESPRESSO_VERSION = '2.2.2'
+final RUNNER_VERSION = '0.5'
 
 dependencies {
     testCompile 'junit:junit:4.12'
@@ -38,8 +35,9 @@ dependencies {
     androidTestCompile "com.android.support.test.espresso:espresso-core:${ESPRESSO_VERSION}"
     androidTestCompile "com.android.support.test.espresso:espresso-intents:${ESPRESSO_VERSION}"
     androidTestCompile ("com.android.support.test.espresso:espresso-contrib:${ESPRESSO_VERSION}"){
-        exclude group: 'com.android.support', module: 'appcompat'
+        exclude group: 'com.android.support', module: 'appcompat-v7'
         exclude group: 'com.android.support', module: 'support-v4'
+        exclude group: 'com.android.support', module: 'design'
         exclude module: 'recyclerview-v7'
     }
     androidTestCompile "com.squareup.retrofit2:retrofit-mock:${RETROFIT_VERSION}"
