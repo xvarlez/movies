@@ -4,7 +4,6 @@ import android.app.Instrumentation;
 import android.content.Intent;
 import android.net.Uri;
 import android.support.test.InstrumentationRegistry;
-import android.support.test.espresso.contrib.RecyclerViewActions;
 import android.support.test.espresso.intent.Intents;
 import android.support.test.espresso.intent.rule.IntentsTestRule;
 import android.support.test.runner.AndroidJUnit4;
@@ -18,22 +17,21 @@ import javax.inject.Inject;
 
 import me.varlez.movies.MockMoviesApp;
 import me.varlez.movies.R;
-import me.varlez.movies.common.RecyclerViewAssertions;
 import me.varlez.movies.common.di.TestComponent;
 import me.varlez.movies.common.rest.MovieService;
-import me.varlez.movies.movie.list.view.MovieListActivity;
+import me.varlez.movies.movie.detail.view.MovieDetailActivity;
+import me.varlez.movies.movie.detail.view.MovieDetailFragment;
 
 import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.action.ViewActions.click;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasAction;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasData;
 import static android.support.test.espresso.intent.matcher.IntentMatchers.hasExtra;
-import static android.support.test.espresso.intent.matcher.IntentMatchers.toPackage;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static org.hamcrest.Matchers.allOf;
 
 /**
- * Behavior test of our {@link me.varlez.movies.movie.detail.MovieDetailActivity}.
+ * Behavior test of our {@link MovieDetailActivity}.
  */
 @RunWith(AndroidJUnit4.class)
 public class MovieDetailsActivityBehaviorTest {

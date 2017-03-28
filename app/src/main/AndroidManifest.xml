@@ -15,15 +15,19 @@
         <activity
             android:name="me.varlez.movies.movie.list.view.MovieListActivity"
             android:label="@string/title_movie_list"
-            android:theme="@style/AppTheme.NoActionBar">
+            android:theme="@style/AppTheme.NoActionBar"
+            android:launchMode="singleTop">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
+                <action android:name="android.intent.action.SEARCH" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+            <meta-data
+                android:name="android.app.searchable"
+                android:resource="@xml/searchable" />
         </activity>
         <activity
-            android:name="me.varlez.movies.movie.detail.MovieDetailActivity"
+            android:name=".movie.detail.view.MovieDetailActivity"
             android:label="@string/title_movie_detail"
             android:parentActivityName="me.varlez.movies.movie.list.view.MovieListActivity"
             android:theme="@style/AppTheme.NoActionBar">

@@ -20,7 +20,7 @@ import me.varlez.movies.R;
 import me.varlez.movies.common.RecyclerViewAssertions;
 import me.varlez.movies.common.di.TestComponent;
 import me.varlez.movies.common.rest.MovieService;
-import me.varlez.movies.movie.detail.MovieDetailFragment;
+import me.varlez.movies.movie.detail.view.MovieDetailFragment;
 import me.varlez.movies.movie.list.view.MovieListActivity;
 
 import static android.support.test.espresso.Espresso.onView;

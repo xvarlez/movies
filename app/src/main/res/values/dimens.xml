@@ -5,4 +5,5 @@
     <dimen name="item_width">200dp</dimen>
     <dimen name="row_height">96dp</dimen>
     <dimen name="cell_padding">8dp</dimen>
+    <dimen name="default_padding">16dp</dimen>
 </resources>

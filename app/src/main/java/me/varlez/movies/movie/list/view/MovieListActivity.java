@@ -1,30 +1,33 @@
 package me.varlez.movies.movie.list.view;
 
+import android.app.SearchManager;
+import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import android.support.annotation.NonNull;
+import android.support.v4.content.ContextCompat;
+import android.support.v4.view.MenuItemCompat;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.view.Menu;
 
-import javax.inject.Inject;
+import com.hannesdorfmann.mosby.mvp.lce.MvpLceActivity;
+
+import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
 import me.varlez.movies.MoviesApp;
 import me.varlez.movies.R;
-import me.varlez.movies.common.Consts;
-import me.varlez.movies.common.Logger;
 import me.varlez.movies.common.di.component.MoviesComponent;
-import me.varlez.movies.common.model.SearchResults;
-import me.varlez.movies.common.rest.MovieService;
-import me.varlez.movies.movie.detail.MovieDetailActivity;
-import me.varlez.movies.movie.detail.MovieDetailFragment;
+import me.varlez.movies.common.model.Movie;
+import me.varlez.movies.movie.detail.view.MovieDetailActivity;
+import me.varlez.movies.movie.detail.view.MovieDetailFragment;
+import me.varlez.movies.movie.list.presenter.DefaultMovieListPresenter;
+import me.varlez.movies.movie.list.presenter.MovieListPresenter;
 import me.varlez.movies.movie.list.view.adapter.MovieRecyclerViewAdapter;
-import retrofit2.Call;
-import retrofit2.Callback;
-import retrofit2.Response;
-import retrofit2.Retrofit;
-import retrofit2.converter.gson.GsonConverterFactory;
 
 /**
  * An activity representing a list of Movies. This activity
@@ -34,7 +37,7 @@ import retrofit2.converter.gson.GsonConverterFactory;
  * item details. On tablets, the activity presents the list of items and
  * item details side-by-side using two vertical panes.
  */
-public class MovieListActivity extends AppCompatActivity implements MovieRecyclerViewAdapter.MovieClickListener {
+public class MovieListActivity extends MvpLceActivity<SwipeRefreshLayout, List<Movie>, MovieListView, MovieListPresenter> implements MovieListView, MovieRecyclerViewAdapter.MovieClickListener, SwipeRefreshLayout.OnRefreshListener {
 
     /**
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
@@ -47,14 +50,16 @@ public class MovieListActivity extends AppCompatActivity implements MovieRecycle
      */
     private MoviesComponent moviesComponent;
 
-    @Inject
-    MovieService movieService;
-
     @Bind(R.id.toolbar)
     Toolbar toolbar;
 
     @Bind(R.id.movie_list)
     RecyclerView recyclerView;
+
+    /**
+     * The movie title that should be searched.
+     */
+    private String searchQuery;
 
 
     @Override
@@ -62,10 +67,10 @@ public class MovieListActivity extends AppCompatActivity implements MovieRecycle
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_movie_list);
 
-        moviesComponent = ((MoviesApp) getApplication()).getMoviesComponent();
-        moviesComponent.inject(this);
-
         ButterKnife.bind(this);
+
+        contentView.setOnRefreshListener(this);
+        contentView.setColorSchemeColors(ContextCompat.getColor(this, R.color.colorPrimary));
 
         setSupportActionBar(toolbar);
         toolbar.setTitle(getTitle());
@@ -74,27 +79,38 @@ public class MovieListActivity extends AppCompatActivity implements MovieRecycle
             mTwoPane = true;
         }
 
-        requestApiData();
+        searchQuery = "Batman";
+
+        loadData(false);
+        handleIntent(getIntent());
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        setIntent(intent);
+        handleIntent(intent);
     }
 
     /**
-     * Request the data from our REST API and handle the response.
+     * Handles the intent received by the activity and performs a search if needed.
+     * @param intent
      */
-    private void requestApiData() {
-        Call<SearchResults> call = movieService.list("Batman", "movie");
+    private void handleIntent(Intent intent) {
+        if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
+            searchQuery = intent.getStringExtra(SearchManager.QUERY);
+            loadData(false);
+        }
+    }
 
-        call.enqueue(new Callback<SearchResults>() {
-            @Override
-            public void onResponse(Call<SearchResults> call, Response<SearchResults> response) {
-                recyclerView.setAdapter(new MovieRecyclerViewAdapter(response.body().getMovies(), MovieListActivity.this, moviesComponent));
-            }
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.activity_movie_list, menu);
 
-            @Override
-            public void onFailure(Call<SearchResults> call, Throwable t) {
-                Logger.e("Errroooooorrrrrrrr !");
-                Logger.e(t.getMessage());
-            }
-        });
+        SearchView searchView = (SearchView) MenuItemCompat.getActionView(menu.findItem(R.id.action_search));
+        SearchManager searchManager = (SearchManager) getSystemService(Context.SEARCH_SERVICE);
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(getComponentName()));
+
+        return true;
     }
 
     @Override
@@ -108,10 +124,46 @@ public class MovieListActivity extends AppCompatActivity implements MovieRecycle
                     .replace(R.id.movie_detail_container, fragment)
                     .commit();
         } else {
-            Intent intent = new Intent(MovieListActivity.this, MovieDetailActivity.class);
-            intent.putExtra(MovieDetailFragment.ARG_MOVIE_ID, movieId);
-
-            startActivity(intent);
+           presenter.openMovieDetails(this, movieId);
         }
+    }
+
+    @Override
+    public void showContent() {
+        super.showContent();
+        contentView.setRefreshing(false);
+    }
+
+    @Override
+    public void showError(Throwable e, boolean pullToRefresh) {
+        super.showError(e, false);
+        contentView.setRefreshing(false);
+    }
+
+    @Override
+    protected String getErrorMessage(Throwable e, boolean pullToRefresh) {
+        return "Oops ! Something bad happened :\n\n" + e.getMessage() + "\n\nTouch to retry";
+    }
+
+    @Override
+    public void setData(List<Movie> data) {
+        recyclerView.setAdapter(new MovieRecyclerViewAdapter(data, MovieListActivity.this, moviesComponent));
+    }
+
+    @Override
+    public void loadData(boolean pullToRefresh) {
+        presenter.movieList(searchQuery, pullToRefresh);
+    }
+
+    @NonNull
+    @Override
+    public MovieListPresenter createPresenter() {
+        moviesComponent = ((MoviesApp) getApplication()).getMoviesComponent();
+        return new DefaultMovieListPresenter(moviesComponent);
+    }
+
+    @Override
+    public void onRefresh() {
+        loadData(true);
     }
 }
