@@ -24,6 +24,7 @@
             app:toolbarId="@+id/toolbar">
 
             <ImageView
+                android:importantForAccessibility="no"
                 android:id="@+id/imageview_header"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
@@ -34,7 +35,7 @@
                 android:background="@drawable/black_gradient" />
 
             <android.support.v7.widget.Toolbar
-                android:id="@+id/detail_toolbar"
+                android:id="@+id/toolbar"
                 android:background="@android:color/transparent"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"

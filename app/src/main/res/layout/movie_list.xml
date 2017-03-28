@@ -12,7 +12,7 @@
         android:id="@+id/movie_list"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        app:layoutManager="LinearLayoutManager"
-        tools:listitem="@layout/row_movie" />
+        app:layoutManager="GridLayoutManager"
+        tools:listitem="@layout/item_movie" />
 
 </android.support.v4.widget.SwipeRefreshLayout>

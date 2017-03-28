@@ -22,7 +22,7 @@
             android:text="@string/director" />
 
         <TextView
-            android:id="@+id/movie_director"
+            android:id="@+id/movie_director_textview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
@@ -40,12 +40,12 @@
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true"
-            android:layout_below="@+id/movie_director"
+            android:layout_below="@+id/movie_director_textview"
             android:padding="16dp"
             android:text="@string/plot" />
 
         <TextView
-            android:id="@+id/movie_plot"
+            android:id="@+id/movie_plot_textview"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_alignParentLeft="true"
