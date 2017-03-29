@@ -7,12 +7,12 @@ import android.os.Bundle
 import android.support.v4.content.ContextCompat
 import android.support.v4.view.MenuItemCompat
 import android.support.v4.widget.SwipeRefreshLayout
+import android.support.v7.widget.DividerItemDecoration
 import android.support.v7.widget.GridLayoutManager
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.SearchView
 import android.view.Menu
 import com.hannesdorfmann.mosby3.mvp.lce.MvpLceActivity
-import kotlinx.android.synthetic.main.activity_movie_list.*
 import kotlinx.android.synthetic.main.movie_list.*
 import me.varlez.movies.MoviesApp
 import me.varlez.movies.R
@@ -23,6 +23,7 @@ import me.varlez.movies.movie.detail.view.MovieDetailFragment
 import me.varlez.movies.movie.list.presenter.DefaultMovieListPresenter
 import me.varlez.movies.movie.list.presenter.MovieListPresenter
 import me.varlez.movies.movie.list.view.adapter.MovieRecyclerViewAdapter
+
 
 /**
  * An activity representing a list of Movies. This activity
@@ -52,6 +53,8 @@ class MovieListActivity : MvpLceActivity<SwipeRefreshLayout, List<Movie>, MovieL
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        moviesComponent = MoviesApp.get(this).moviesComponent
+
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_movie_list)
 
@@ -60,9 +63,13 @@ class MovieListActivity : MvpLceActivity<SwipeRefreshLayout, List<Movie>, MovieL
 
         supportActionBar?.title = title
 
-        if (findViewById(R.id.movie_detail_container) != null) {
+        if (movie_detail_container != null) {
             isTwoPane = true
-            movie_list?.layoutManager = LinearLayoutManager(this)
+            val layoutManager = LinearLayoutManager(this)
+            val dividerItemDecoration = DividerItemDecoration(this, layoutManager.orientation)
+
+            movie_list?.addItemDecoration(dividerItemDecoration)
+            movie_list?.layoutManager = layoutManager
         } else {
             movie_list?.layoutManager = GridLayoutManager(this, 2)
         }
@@ -137,7 +144,6 @@ class MovieListActivity : MvpLceActivity<SwipeRefreshLayout, List<Movie>, MovieL
     }
 
     override fun createPresenter(): MovieListPresenter {
-        moviesComponent = MoviesApp.get(this).moviesComponent
         return DefaultMovieListPresenter(moviesComponent)
     }
 

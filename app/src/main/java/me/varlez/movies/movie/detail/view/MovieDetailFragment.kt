@@ -7,8 +7,7 @@ import android.view.ViewGroup
 import android.widget.RelativeLayout
 import com.hannesdorfmann.mosby3.mvp.lce.MvpLceFragment
 import com.squareup.picasso.Picasso
-import kotlinx.android.synthetic.main.activity_movie_detail.*
-import kotlinx.android.synthetic.main.movie_detail.*
+import kotlinx.android.synthetic.main.fragment_movie_detail.*
 import me.varlez.movies.MoviesApp
 import me.varlez.movies.R
 import me.varlez.movies.common.di.component.MoviesComponent
@@ -32,19 +31,22 @@ class MovieDetailFragment : MvpLceFragment<RelativeLayout, Movie, MovieDetailVie
     private lateinit var moviesComponent: MoviesComponent
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
         moviesComponent = MoviesApp.get(context).moviesComponent
+        super.onCreate(savedInstanceState)
         moviesComponent.inject(this)
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-        return inflater!!.inflate(R.layout.movie_detail, container, false)
+        return inflater!!.inflate(R.layout.fragment_movie_detail, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+//        setSupportActionBar(toolbar)
+//        supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        
         fab?.setOnClickListener { presenter.openImdb(activity) }
 
         if (arguments.containsKey(ARG_MOVIE_ID)) {

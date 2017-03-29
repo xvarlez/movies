@@ -4,9 +4,8 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import com.squareup.picasso.Picasso
+import kotlinx.android.synthetic.main.item_movie_list.view.*
 import me.varlez.movies.R
 import me.varlez.movies.common.di.component.MoviesComponent
 import me.varlez.movies.common.model.Movie
@@ -29,7 +28,6 @@ class MovieRecyclerViewAdapter(private val values: List<Movie>,
     internal lateinit var picassoService: Picasso
 
     init {
-
         moviesComponent.inject(this)
 
         // We sort the movies by year (descending)
@@ -38,20 +36,13 @@ class MovieRecyclerViewAdapter(private val values: List<Movie>,
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
         val view = LayoutInflater.from(parent.context)
-                .inflate(R.layout.item_movie, parent, false)
+                .inflate(R.layout.item_movie_grid, parent, false)
         return ViewHolder(view)
     }
 
     override fun onBindViewHolder(holder: ViewHolder, position: Int) {
         val movie = values[position]
-
-        picassoService.load(movie.posterUrl)
-                .fit()
-                .into(holder.posterView)
-
-        holder.titleView.text = movie.title
-        holder.yearView.text = movie.year.toString()
-        holder.view.setOnClickListener { listener.movieClicked(movie.id) }
+        holder.bind(movie)
     }
 
     override fun getItemCount(): Int {
@@ -59,8 +50,14 @@ class MovieRecyclerViewAdapter(private val values: List<Movie>,
     }
 
     inner class ViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
-        val titleView: TextView = view.findViewById(R.id.textview_title) as TextView
-        val yearView: TextView = view.findViewById(R.id.textview_year) as TextView
-        val posterView: ImageView = view.findViewById(R.id.imageview_poster) as ImageView
+        fun bind(movie: Movie) {
+            picassoService.load(movie.posterUrl)
+                    .fit()
+                    .into(itemView.imageview_poster)
+
+            itemView.textview_title.text = movie.title
+            itemView.textview_year.text = movie.year.toString()
+            view.setOnClickListener { listener.movieClicked(movie.id) }
+        }
     }
 }

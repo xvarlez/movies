@@ -4,7 +4,6 @@ import android.content.Intent
 import android.os.Bundle
 import android.support.v7.app.AppCompatActivity
 import android.view.MenuItem
-import kotlinx.android.synthetic.main.activity_movie_detail.*
 import me.varlez.movies.R
 import me.varlez.movies.movie.list.view.MovieListActivity
 
@@ -19,9 +18,6 @@ class MovieDetailActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_movie_detail)
-
-        setSupportActionBar(toolbar)
-        supportActionBar?.setDisplayHomeAsUpEnabled(true)
 
         val arguments = Bundle()
         arguments.putString(MovieDetailFragment.ARG_MOVIE_ID,

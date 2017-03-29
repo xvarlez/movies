@@ -13,6 +13,6 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layoutManager="GridLayoutManager"
-        tools:listitem="@layout/item_movie" />
+        tools:listitem="@layout/item_movie_list" />
 
 </android.support.v4.widget.SwipeRefreshLayout>
