@@ -71,7 +71,7 @@ class MovieListActivity : MvpLceActivity<SwipeRefreshLayout, List<Movie>, MovieL
             movie_list?.addItemDecoration(dividerItemDecoration)
             movie_list?.layoutManager = layoutManager
         } else {
-            movie_list?.layoutManager = GridLayoutManager(this, 2)
+            movie_list?.layoutManager = GridLayoutManager(this, resources.getInteger(R.integer.grid_span))
         }
 
         searchQuery = "Batman"
