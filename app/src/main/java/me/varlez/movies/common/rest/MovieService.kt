@@ -1,5 +1,6 @@
 package me.varlez.movies.common.rest
 
+import io.reactivex.Observable
 import me.varlez.movies.common.model.Movie
 import me.varlez.movies.common.model.SearchResults
 import retrofit2.Call
@@ -11,8 +12,8 @@ import retrofit2.http.Query
  */
 interface MovieService {
     @GET("/")
-    fun movie(@Query("i") movieId: String): Call<Movie>
+    fun movie(@Query("i") movieId: String): Observable<Movie>
 
     @GET("/")
-    fun list(@Query("s") query: String?, @Query("type") type: String): Call<SearchResults>
+    fun list(@Query("s") query: String?, @Query("type") type: String): Observable<SearchResults>
 }

@@ -10,7 +10,9 @@ import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.fragment_movie_detail.*
 import me.varlez.movies.MoviesApp
 import me.varlez.movies.R
-import me.varlez.movies.common.di.component.MoviesComponent
+import me.varlez.movies.common.di.component.AppComponent
+import me.varlez.movies.common.di.component.DaggerMovieComponent
+import me.varlez.movies.common.di.module.MovieModule
 import me.varlez.movies.common.model.Movie
 import me.varlez.movies.movie.detail.presenter.DefaultMovieDetailPresenter
 import me.varlez.movies.movie.detail.presenter.MovieDetailPresenter
@@ -28,12 +30,12 @@ class MovieDetailFragment : MvpLceFragment<RelativeLayout, Movie, MovieDetailVie
     @Inject
     internal lateinit var picasso: Picasso
 
-    private lateinit var moviesComponent: MoviesComponent
+    private lateinit var appComponent: AppComponent
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        moviesComponent = MoviesApp.get(context).moviesComponent
+        appComponent = MoviesApp.get(context).appComponent
         super.onCreate(savedInstanceState)
-        moviesComponent.inject(this)
+        appComponent.inject(this)
     }
 
     override fun onCreateView(inflater: LayoutInflater?, container: ViewGroup?,
@@ -46,7 +48,7 @@ class MovieDetailFragment : MvpLceFragment<RelativeLayout, Movie, MovieDetailVie
 
 //        setSupportActionBar(toolbar)
 //        supportActionBar?.setDisplayHomeAsUpEnabled(true)
-        
+
         fab?.setOnClickListener { presenter.openImdb(activity) }
 
         if (arguments.containsKey(ARG_MOVIE_ID)) {
@@ -70,7 +72,12 @@ class MovieDetailFragment : MvpLceFragment<RelativeLayout, Movie, MovieDetailVie
     }
 
     override fun createPresenter(): MovieDetailPresenter {
-        return DefaultMovieDetailPresenter(moviesComponent)
+        val movieComponent = DaggerMovieComponent
+                .builder()
+                .appComponent(MoviesApp.get(context).appComponent)
+                .movieModule(MovieModule(context))
+                .build()
+        return DefaultMovieDetailPresenter(movieComponent)
     }
 
     override fun getErrorMessage(e: Throwable, pullToRefresh: Boolean): String {

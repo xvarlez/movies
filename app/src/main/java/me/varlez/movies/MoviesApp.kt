@@ -2,17 +2,16 @@ package me.varlez.movies
 
 import android.app.Application
 import android.content.Context
-
-import me.varlez.movies.common.di.component.DaggerMoviesComponent
-import me.varlez.movies.common.di.component.MoviesComponent
-import me.varlez.movies.common.di.module.MoviesModule
+import me.varlez.movies.common.di.component.AppComponent
+import me.varlez.movies.common.di.component.DaggerAppComponent
+import me.varlez.movies.common.di.module.NetworkModule
 
 /**
  * Custom application class handling Dagger graph creation.
  */
 open class MoviesApp : Application() {
 
-    lateinit var moviesComponent: MoviesComponent
+    lateinit var appComponent: AppComponent
         protected set
 
     override fun onCreate() {
@@ -21,9 +20,9 @@ open class MoviesApp : Application() {
     }
 
     protected open fun initAppComponent() {
-        this.moviesComponent = DaggerMoviesComponent
+        this.appComponent = DaggerAppComponent
                 .builder()
-                .moviesModule(MoviesModule(this))
+                .networkModule(NetworkModule(this))
                 .build()
     }
 

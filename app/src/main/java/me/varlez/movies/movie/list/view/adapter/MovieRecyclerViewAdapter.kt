@@ -7,7 +7,7 @@ import android.view.ViewGroup
 import com.squareup.picasso.Picasso
 import kotlinx.android.synthetic.main.item_movie_list.view.*
 import me.varlez.movies.R
-import me.varlez.movies.common.di.component.MoviesComponent
+import me.varlez.movies.common.di.component.AppComponent
 import me.varlez.movies.common.model.Movie
 import java.util.*
 import javax.inject.Inject
@@ -18,7 +18,7 @@ import javax.inject.Inject
  */
 class MovieRecyclerViewAdapter(private val values: List<Movie>,
                                private val listener: MovieRecyclerViewAdapter.MovieClickListener,
-                               moviesComponent: MoviesComponent) : RecyclerView.Adapter<MovieRecyclerViewAdapter.ViewHolder>() {
+                               moviesComponent: AppComponent) : RecyclerView.Adapter<MovieRecyclerViewAdapter.ViewHolder>() {
 
     interface MovieClickListener {
         fun movieClicked(movieId: String)

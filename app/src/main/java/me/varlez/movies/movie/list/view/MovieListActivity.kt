@@ -16,7 +16,9 @@ import com.hannesdorfmann.mosby3.mvp.lce.MvpLceActivity
 import kotlinx.android.synthetic.main.movie_list.*
 import me.varlez.movies.MoviesApp
 import me.varlez.movies.R
-import me.varlez.movies.common.di.component.MoviesComponent
+import me.varlez.movies.common.di.component.AppComponent
+import me.varlez.movies.common.di.component.DaggerMovieComponent
+import me.varlez.movies.common.di.module.MovieModule
 import me.varlez.movies.common.model.Movie
 import me.varlez.movies.movie.detail.view.MovieDetailActivity
 import me.varlez.movies.movie.detail.view.MovieDetailFragment
@@ -44,7 +46,7 @@ class MovieListActivity : MvpLceActivity<SwipeRefreshLayout, List<Movie>, MovieL
     /**
      * The dagger component that will be used to inject our dependencies.
      */
-    private lateinit var moviesComponent: MoviesComponent
+    private lateinit var appComponent: AppComponent
 
     /**
      * The movie title that should be searched.
@@ -53,7 +55,7 @@ class MovieListActivity : MvpLceActivity<SwipeRefreshLayout, List<Movie>, MovieL
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        moviesComponent = MoviesApp.get(this).moviesComponent
+        appComponent = MoviesApp.get(this).appComponent
 
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_movie_list)
@@ -136,15 +138,22 @@ class MovieListActivity : MvpLceActivity<SwipeRefreshLayout, List<Movie>, MovieL
     }
 
     override fun setData(data: List<Movie>) {
-        movie_list?.adapter = MovieRecyclerViewAdapter(data, this, moviesComponent)
+        movie_list?.adapter = MovieRecyclerViewAdapter(data, this, appComponent)
     }
 
     override fun loadData(pullToRefresh: Boolean) {
-        presenter.movieList(searchQuery, pullToRefresh)
+        if (searchQuery != null) {
+            presenter.movieList(searchQuery!!, pullToRefresh)
+        }
     }
 
     override fun createPresenter(): MovieListPresenter {
-        return DefaultMovieListPresenter(moviesComponent)
+        val movieComponent = DaggerMovieComponent
+                .builder()
+                .appComponent(appComponent)
+                .movieModule(MovieModule(this))
+                .build()
+        return DefaultMovieListPresenter(movieComponent)
     }
 
     override fun onRefresh() {

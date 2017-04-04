@@ -1,6 +1,7 @@
 package me.varlez.movies
 
-import me.varlez.movies.common.di.MockMoviesModule
+import me.varlez.movies.common.di.DaggerTestAppComponent
+import me.varlez.movies.common.di.MockNetworkModule
 
 /**
  * Mock of our custom Application class that will be creating our
@@ -9,9 +10,9 @@ import me.varlez.movies.common.di.MockMoviesModule
 class MockMoviesApp : MoviesApp() {
 
     override fun initAppComponent() {
-        this.moviesComponent = DaggerTestComponent
+        this.appComponent = DaggerTestAppComponent
                 .builder()
-                .mockMoviesModule(MockMoviesModule(this))
+                .mockNetworkModule(MockNetworkModule(this))
                 .build()
     }
 

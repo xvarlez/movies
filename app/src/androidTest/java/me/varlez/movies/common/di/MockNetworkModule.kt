@@ -13,17 +13,13 @@ import javax.inject.Singleton
  * mocked dependencies.
  */
 @Module
-class MockMoviesModule(private val context: Context) {
+class MockNetworkModule(private val context: Context) {
 
     @Provides
     @Singleton
-    internal fun providePicasso(): Picasso {
-        return Picasso.with(context)
-    }
+    internal fun providePicasso(): Picasso = Picasso.with(context)
 
     @Provides
     @Singleton
-    internal fun provideMovieService(): MovieService {
-        return MockMovieService()
-    }
+    internal fun provideMovieService(): MovieService = MockMovieService()
 }

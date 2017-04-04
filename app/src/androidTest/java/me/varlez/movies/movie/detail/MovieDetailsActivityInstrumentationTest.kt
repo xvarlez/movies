@@ -13,7 +13,7 @@ import android.support.test.espresso.matcher.ViewMatchers.withId
 import android.support.test.runner.AndroidJUnit4
 import me.varlez.movies.MockMoviesApp
 import me.varlez.movies.R
-import me.varlez.movies.common.di.TestComponent
+import me.varlez.movies.common.di.TestAppComponent
 import me.varlez.movies.common.rest.MovieService
 import me.varlez.movies.movie.detail.view.MovieDetailActivity
 import me.varlez.movies.movie.detail.view.MovieDetailFragment
@@ -28,12 +28,12 @@ import javax.inject.Inject
  * Behavior test of our [MovieDetailActivity].
  */
 @RunWith(AndroidJUnit4::class)
-class MovieDetailsActivityBehaviorTest {
+class MovieDetailsActivityInstrumentationTest {
 
     @Inject
     internal lateinit var movieService: MovieService
 
-    @Rule
+    @get:Rule
     var activityRule = IntentsTestRule(MovieDetailActivity::class.java,
             true,
             false)
@@ -42,7 +42,7 @@ class MovieDetailsActivityBehaviorTest {
     fun setUp() {
         val instrumentation = InstrumentationRegistry.getInstrumentation()
         val app = instrumentation.targetContext.applicationContext as MockMoviesApp
-        val component = app.moviesComponent as TestComponent
+        val component = app.appComponent as TestAppComponent
         component.inject(this)
     }
 
